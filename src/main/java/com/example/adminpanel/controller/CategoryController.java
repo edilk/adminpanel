@@ -18,8 +18,21 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody Category category) {
-        return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.OK);
+    public ResponseEntity<?> create(@RequestBody Category category) {
+        try {
+            return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -27,9 +40,9 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<Category> update(@RequestBody Category category) {
-        return new ResponseEntity<>(categoryService.updateCategory(category), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
+        return new ResponseEntity<>(categoryService.updateCategory(id, category), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -4,6 +4,7 @@ package com.example.adminpanel.service;
 import com.example.adminpanel.dto.ArticleDTO;
 import com.example.adminpanel.entity.Article;
 import com.example.adminpanel.repository.ArticleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,12 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public Article updateArticle(Article article) {
+    public Article updateArticle(Long id, Article article) {
+        Article existingArticle = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Article not found"));
+        existingArticle.setTitle(article.getTitle());
+        existingArticle.setDescription(article.getDescription());
+        existingArticle.setImage(article.getImage());
         return articleRepository.save(article);
     }
 

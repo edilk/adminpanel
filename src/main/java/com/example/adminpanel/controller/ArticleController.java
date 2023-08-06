@@ -27,9 +27,9 @@ public class ArticleController {
         return new ResponseEntity<>(articleService.getAllArticles(), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<Article> update(@RequestBody Article article) {
-        return new ResponseEntity<>(articleService.updateArticle(article), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody Article article) {
+        return new ResponseEntity<>(articleService.updateArticle(id, article), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.example.adminpanel.controller;
 
+import com.example.adminpanel.dto.RegistrationUserDTO;
 import com.example.adminpanel.dto.UserDTO;
 import com.example.adminpanel.entity.User;
 import com.example.adminpanel.service.UserService;
@@ -18,8 +19,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.OK);
+    public ResponseEntity<?> create(@RequestBody RegistrationUserDTO user) {
+        try {
+            return new ResponseEntity<>(userService.createNewUser(user), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -27,9 +41,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<User> update(@RequestBody User user) {
-        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
+        return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
